@@ -21,7 +21,7 @@
 - 글로벌 체크포인트가 존재하지 않으며 연산자 단위 상태로 구성 → 파이프라인 관리 복잡.
 - 프로그래밍 모델이 매우 저수준으로, 추상화가 부족하여 생산성 측면에서 불리함.
 ### 4. 다른 시스템과 비교하였을 때의 강점은?
-- MillWheel은 당시 기준으로는 매우 획기적인 시간 모델을 제안함:
+- MillWheel은 당시 기준으로는 매우 획기적인 시간 모델을 제안함:  
 이벤트타임 처리, 워터마크 전파, 타이머 관리 등 현재 Flink/Beam에서도 채택된 개념을 대부분 최초 구현.
 - Storm보다 latency는 유사하지만 일관성(consistency) 및 중복제거(idempotency) 측면에서 압도적인 차이.
 - Kafka Streams나 Spark Structured Streaming처럼 micro-batch 기반이 아닌 True Stream Processor로 분류됨.
