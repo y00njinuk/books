@@ -1,3 +1,13 @@
+# 개요
+<img width="867" height="397" alt="image" src="https://github.com/user-attachments/assets/84ea6808-e0ed-4921-89bd-ba03ef71f234" />  
+
+- 발표구성 및 내용 간략히 소개
+  - 유래 및 연도
+  - 특징
+  - 장점 및 단점
+  - 다른 시스템과 비교하여을 때의 강점은?
+  - 그 외 기술적 특징
+
 ## MillWheel
 ### 1. 유래 및 연도
 - Google 내부에서 2008년부터 개발이 시작되어 2013년 VLDB에 논문으로 공개됨.
