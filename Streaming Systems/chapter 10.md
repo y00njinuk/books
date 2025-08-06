@@ -1,6 +1,7 @@
 ## MillWheel
 ### 1. 유래 및 연도
 - Google 내부에서 2008년부터 개발이 시작되어 2013년 VLDB에 논문으로 공개됨.
+  <img width="600" height="395" alt="image" src="https://github.com/user-attachments/assets/ec7d4692-919e-431f-85e2-29ce4d1ca296" />
 - FlumeJava, MapReduce 등의 한계를 극복하기 위해 지속적인 스트리밍 처리와 정확한 시간 기반 처리를 목적으로 설계되었음.
 - 이후 Google Cloud Dataflow와 Apache Beam의 시간 모델 및 상태 모델의 기반이 됨.
 ### 2. 특징
@@ -74,6 +75,7 @@
 ## Cloud Dataflow
 ### 1. 유래 및 연도
 - 2015년 Google Cloud Platform에서 공개한 완전 관리형 스트리밍 및 배치 처리 서비스.
+  <img width="600" height="527" alt="image" src="https://github.com/user-attachments/assets/05b5b1ad-c4cf-4bfb-93dd-544adde55b0d" />
 - Apache Beam 모델의 참조 구현체로 기능하며, Google 내부 기술(MillWheel, FlumeJava 등)을 기반으로 설계됨.
 ### 2. 특징
 - 스트리밍 + 배치 통합 프로그래밍 모델을 지원하는 서버리스 플랫폼.
@@ -115,8 +117,11 @@
 ### 3. 장점 및 단점
 #### 3.1. 장점
 - 고성능: Operator chaining, pipelined execution, off-heap state 등으로 높은 처리량.
+  <img width="600" height="657" alt="image" src="https://github.com/user-attachments/assets/70a8d858-6a68-45a6-b4d3-44ab321261c2" />
 - 강력한 상태 관리: RocksDB 또는 인메모리 backend, Keyed State, Queryable State 등 지원.
 - 정확히 한 번 처리 보장: Chandy-Lamport 기반 체크포인트 + savepoint.
+  <img width="600" height="525" alt="image" src="https://github.com/user-attachments/assets/1775ba8f-3925-41d7-ae88-c42bf3091b24" />
+  <img width="600" height="630" alt="image" src="https://github.com/user-attachments/assets/8d438177-b75a-4f18-a7f3-acae8af44184" />
 - Event-time 중심의 처리 모델과 유연한 트리거 API.
 #### 3.2. 단점
 - 클러스터 구성 및 운영 복잡: JobManager, TaskManager, checkpoint 디렉토리 등 설정 필요.
@@ -129,6 +134,7 @@
 - Cloud Dataflow보다 낮은 레벨에서 세밀한 설정이 가능하며, 성능/지연 튜닝 폭이 넓음.
 ### 5. 그 외 기술적 특징
 - 상태 관리: RocksDB(디스크 기반) 또는 heap state(메모리 기반) 선택 가능.
+  <img width="600" height="535" alt="image" src="https://github.com/user-attachments/assets/c97e6de9-f6b0-467b-b974-be6463ec5a0a" />
 - 상태는 Keyed State로 분리되어 각 파티션에 분산 저장됨.
 - 체크포인트/스냅샷: Barrier-aligned checkpoint를 통해 글로벌 스냅샷 생성.
 - Savepoint는 사용자 요청 시 생성되며, 파이프라인 재시작 및 업그레이드에 활용.
@@ -157,7 +163,6 @@
 - 하나의 코드로 다양한 환경에 배포 가능 (예: 개발은 로컬 Spark, 운영은 Dataflow).
 - 모델 수준에서 이벤트타임, 트리거, 세션 등 스트리밍의 핵심 개념을 완비함.
 - 실행 환경 변화에 대응 가능한 유연성 확보.
-
 ### 5. 그 외 기술적 특징
 - 상태 관리: Beam은 사용자 정의 상태(StateSpec)를 제공하며, SDK에서 정의된 상태는 러너에 의해 구현됨.
 - 워터마크: 데이터 소스에서의 이벤트타임 추론을 통해 시스템 내 워터마크 전파.
