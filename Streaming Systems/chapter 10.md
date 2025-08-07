@@ -35,7 +35,7 @@
 - MillWheel은 당시 기준으로는 매우 획기적인 시간 모델을 제안함:  
 이벤트타임 처리, 워터마크 전파, 타이머 관리 등 현재 Flink/Beam에서도 채택된 개념을 대부분 최초 구현.
 - Storm보다 latency는 유사하지만 일관성(consistency) 및 중복제거(idempotency) 측면에서 압도적인 차이.
-- Kafka Streams나 Spark Structured Streaming처럼 micro-batch 기반이 아닌 True Stream Processor로 분류됨.
+- Kafka Streams나 Spark Structured Streaming처럼 micro-batch 기반이 아닌 진정한 Stream Processor로 분류됨.
 - Cloud Dataflow 및 Beam 모델의 핵심 설계 사상(특히 시간과 상태에 대한 모델링)은 MillWheel에서 직접 계승됨.
 ### 5. 그 외 기술적 특징
 - 상태 관리 (State Management):  
