@@ -18,13 +18,13 @@
 - 무한 스트리밍 데이터 처리를 위한 분산 스트림 처리 프레임워크.
 - 정확히 한 번 처리(exactly-once semantics)를 실현하는 최초의 대규모 시스템 중 하나.
 - 이벤트타임 기반 윈도우 처리, 워터마크, 사용자 타이머(timer) 기능을 통합적으로 지원.
-- 연산자 간 DAG(Directed Acyclic Graph) 구성, 연산자별 상태(state) 및 메시지 기반 checkpoint 관리.
-- 내부적으로 외부 상태 저장소(예: Bigtable 등)를 사용하여 durable state를 유지함.
+- DAG(Directed Acyclic Graph) 구성, 연산자 별 상태(state) 및 메시지 기반 checkpoint 관리.
+- 내부적으로 외부 상태 저장소(예: Bigtable 등)를 사용하여 persistent state를 유지함.
 ### 3. 장점 및 단점
 #### 3.1. 장점
 - 트랜잭셔널 메시지 처리와 원자적 상태 업데이트로 Exactly-Once 처리 보장.
 - 늦게 도착한 이벤트(out-of-order data)에 대한 처리를 위한 워터마크 개념 도입.
-- 상태 저장의 내구성(durable state) 확보로 장애 복구 시 강력한 일관성 유지 가능.
+- 영구적인 저장 상태(persistent state) 확보로 장애 복구 시 강력한 일관성 유지 가능.
 - 고성능 실시간 처리에 적합하며, 타이머를 통해 복잡한 비동기 논리 구현 가능.
 #### 3.2. 단점
 - 내부 전용 시스템으로 오픈소스가 아니며, 외부 접근 불가.
@@ -39,7 +39,7 @@
 - Cloud Dataflow 및 Beam 모델의 핵심 설계 사상(특히 시간과 상태에 대한 모델링)은 MillWheel에서 직접 계승됨.
 ### 5. 그 외 기술적 특징
 - 상태 관리 (State Management):  
-각 연산자는 상태를 key-value 형태로 관리하며, 외부 durable 저장소에 분산 저장됨. 상태 접근은 반드시 RPC를 통해 이루어지며, atomic read-modify-write 연산을 제공.
+각 연산자는 상태를 key-value 형태로 관리하며, 외부 저장소에 분산 저장됨. 상태 접근은 반드시 RPC를 통해 이루어지며, atomic read-modify-write 연산을 제공.
 - 워터마크 (Watermark):  
 시스템의 입력이 특정 시점까지 도달했음을 나타내는 시계열 신호로, 연산자의 시간 결정, 타이머 동작, 윈도우 폐쇄 등에 핵심적으로 사용됨.
 - 타이머 및 트리거 (Timers & Triggers):  
@@ -129,25 +129,25 @@
 - 고성능: Operator chaining, pipelined execution, off-heap state 등으로 높은 처리량.
   <img width="600" height="657" alt="image" src="https://github.com/user-attachments/assets/70a8d858-6a68-45a6-b4d3-44ab321261c2" />
 - 강력한 상태 관리: RocksDB 또는 인메모리 backend, Keyed State, Queryable State 등 지원.
-- 정확히 한 번 처리 보장: Chandy-Lamport 기반 체크포인트 + savepoint.
+- 정확히 한 번 처리 보장: Chandy-Lamport 기반 체크포인트 + 세이브포인트.
   <img width="600" height="525" alt="image" src="https://github.com/user-attachments/assets/1775ba8f-3925-41d7-ae88-c42bf3091b24" />
   <img width="600" height="630" alt="image" src="https://github.com/user-attachments/assets/8d438177-b75a-4f18-a7f3-acae8af44184" />
 - Event-time 중심의 처리 모델과 유연한 트리거 API.
 #### 3.2. 단점
 - 클러스터 구성 및 운영 복잡: JobManager, TaskManager, checkpoint 디렉토리 등 설정 필요.
 - 시스템 수준 튜닝(예: checkpoint 주기, 병렬도, backpressure 조절 등)에 대한 깊은 이해 필요.
-- 장애 복구/savepoint 이관에는 체크포인트 동기화와 파티션 정합성 고려 필요.
+- 장애 복구/세이브포인트 이관에는 체크포인트 동기화와 파티션 정합성 고려 필요.
 ### 4. 다른 시스템과 비교하였을 때의 강점은?
 - Flink는 상태 기반 복잡한 실시간 처리에 가장 적합하며, CEP, 세션 집계, 스트리밍 조인에 유리함.
 - Kafka Streams는 단순 구조에서 유리하지만 상태 규모, 커스텀 처리 측면에서 Flink보다 제한됨.
-- Beam보다 먼저 savepoint 기능을 제공했고, 실행 계획 최적화 및 제어 능력 우수.
+- Beam보다 먼저 세이브포인트 기능을 제공했고, 실행 계획 최적화 및 제어 능력 우수.
 - Cloud Dataflow보다 낮은 레벨에서 세밀한 설정이 가능하며, 성능/지연 튜닝 폭이 넓음.
 ### 5. 그 외 기술적 특징
 - 상태 관리: RocksDB(디스크 기반) 또는 heap state(메모리 기반) 선택 가능.
   <img width="600" height="535" alt="image" src="https://github.com/user-attachments/assets/c97e6de9-f6b0-467b-b974-be6463ec5a0a" />
 - 상태는 Keyed State로 분리되어 각 파티션에 분산 저장됨.
 - 체크포인트/스냅샷: Barrier-aligned checkpoint를 통해 글로벌 스냅샷 생성.
-- Savepoint는 사용자 요청 시 생성되며, 파이프라인 재시작 및 업그레이드에 활용.
+- 세이브포인트 사용자 요청 시 생성되며, 파이프라인 재시작 및 업그레이드에 활용.
 - 워터마크: 이벤트타임 기반 처리의 핵심으로, 소스 및 연산자 간 전파됨.
 - 주기적 또는 수동으로 워터마크를 생성할 수 있으며, 허용 지연(lateness) 설정 가능.
 
